@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+    <head>
+     <meta name="apple-mobile-web-app-title" content="Geolocation">
+     <link rel="apple-touch-startup-image" sizes="120x120" href="https://image.flaticon.com/icons/png/512/314/314319.png">
+     <link rel="icon" href="https://image.flaticon.com/icons/png/512/314/314319.png">
+   		<meta name="apple-mobile-web-app-capable" content="yes">
+       <!-- <meta name="apple-mobile-web-app-status-bar-style" content="#f7f1df"> -->
+        
+
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        
+        
+    	<meta name = "viewport" content = "user-scalable=no, width=device-width, initial-scale=1.0">
+        <meta name='viewport' content='initial-scale=1, viewport-fit=cover'>
+        
+    </head>
+	<body  onload="getLocation()"> 
+
+<div id="mapholder"></div> 
+       <!-- <input type="button" value="text" style="z-index=100;" onclick ="gobackend()">-->
+<script src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false&libraries=geometry,drawing"></script>
+<script>
+    var stylesArray = [
+        {
+            "featureType": "landscape.man_made",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#f7f1df"
+                }
+            ]
+        },
+        {
+            "featureType": "landscape.natural",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#d0e3b4"
+                }
+            ]
+        },
+        {
+            "featureType": "landscape.natural.terrain",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "poi",
+            "elementType": "labels",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "poi.business",
+            "elementType": "all",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "poi.medical",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#fbd3da"
+                }
+            ]
+        },
+        {
+            "featureType": "poi.park",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#bde6ab"
+                }
+            ]
+        },
+        {
+            "featureType": "road",
+            "elementType": "geometry.stroke",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "road",
+            "elementType": "labels",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "road.highway",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "color": "#ffe15f"
+                }
+            ]
+        },
+        {
+            "featureType": "road.highway",
+            "elementType": "geometry.stroke",
+            "stylers": [
+                {
+                    "color": "#efd151"
+                }
+            ]
+        },
+        {
+            "featureType": "road.arterial",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "color": "#ffffff"
+                }
+            ]
+        },
+        {
+            "featureType": "road.local",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "color": "black"
+                }
+            ]
+        },
+        {
+            "featureType": "transit.station.airport",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "color": "#cfb2db"
+                }
+            ]
+        },
+        {
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#a2daf2"
+                }
+            ]
+        }
+    ];  
+    
+    
+    
+var x = document.getElementById("demo");
+
+
+ 
+   
+    
+    
+    
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+   // var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+    var map = new google.maps.Map(document.getElementById('mapholder'), {
+        center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+        zoom: 16,
+        styles: stylesArray,
+        gestureHandling: 'greedy',
+        disableDefaultUI: true
+    });
+    
+    var mine = new google.maps.Marker({
+        position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+        map: map,
+        title: 'Current location'
+        });
+
+}
+
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
+    }
+}
+    function gobackend(){
+  // Old compatibility code, no longer needed.
+if (window.XMLHttpRequest) { // Mozilla, Safari, IE7+ ...
+    httpRequest = new XMLHttpRequest();
+} else if (window.ActiveXObject) { // IE 6 and older
+    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+}
+
+var userName ='georges';
+httpRequest.open('POST', 'https://api.scriptrapps.io/geoLoc?auth_token=S0Y1MDVFNDhDNjpzY3JpcHRyOjAyNTMwRTYwMjVDMTA5QzcwQUZGQ0UyQjI0NTc1NERE', true);
+httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+httpRequest.setRequestHeader('Access-Control-Allow-Headers', 'x-requested-with');
+httpRequest.send('userName=' + encodeURIComponent(userName));
+
+
+httpRequest.onreadystatechange = function(){
+    
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+        if (httpRequest.status === 200) {
+            var response = JSON.parse(httpRequest.responseText);
+            alert(response.response.result);
+        } else {
+            alert('There was a problem with the request.');
+        }
+    }
+    
+};
+      
+    }
+</script>
+    <style>
+        body{
+    		overflow: hidden;
+            margin : 0 !important;
+
+		}
+        html {
+    -webkit-text-size-adjust: 100%; /* Prevent font scaling in landscape while allowing user zoom */
+}
+      @media all and (orientation:portrait) {
+       #mapholder{
+           overflow: hidden;
+			height:100vh;
+           /*height:95vh; */
+            width : 100vw;
+            padding : 0;
+            margin : 0;
+           
+        }  
+    }
+    @media all and (orientation:landscape) {
+        #mapholder{
+            overflow: hidden;
+			height:100vh;
+            width : 100vw;
+           /* width : 90vw; */
+            margin : 0 !important;
+            padding: 12px;
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+    }      
+
+        
+    </style>
+</body>
+</html>
